@@ -2,6 +2,20 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
+import { 
+  Users, 
+  UserPlus, 
+  Edit2, 
+  Trash2, 
+  Mail, 
+  MapPin, 
+  Bookmark, 
+  User,
+  X,
+  Save,
+  Loader2,
+  AlertCircle
+} from "lucide-react";
 
 // Define TypeScript interfaces
 interface Trainer {
@@ -153,83 +167,116 @@ export default function Trainers() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <Header user={user} onSignOut={handleSignOut} />
       <div className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6">Trainers</h1>
+        <div className="flex items-center mb-6">
+          <Users className="mr-3 text-green-600" size={32} />
+          <h1 className="text-3xl font-bold text-gray-800">Trainers</h1>
+        </div>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+          <div className="flex items-center bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+            <AlertCircle className="mr-2 text-red-500" size={20} />
+            <span>{error}</span>
           </div>
         )}
         
         <button 
           onClick={() => setShowCreateModal(true)}
-          className="bg-green-500 text-white px-4 py-2 rounded mb-4 hover:bg-green-600"
+          className="flex items-center bg-green-600 text-white px-5 py-2 rounded-lg mb-6 hover:bg-green-700 transition-colors duration-300 shadow-sm"
         >
+          <UserPlus className="mr-2" size={18} />
           Create Trainer
         </button>
         
         {loading ? (
-          <div className="text-center py-6">
-            <p className="text-gray-600">Loading trainers...</p>
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="animate-spin mr-2 text-green-600" size={24} />
+            <p className="text-gray-600 font-medium">Loading trainers...</p>
           </div>
         ) : trainers.length === 0 ? (
-          <div className="text-center py-6 bg-gray-50 rounded-lg">
+          <div className="text-center py-12 bg-white rounded-xl border border-gray-100 shadow-sm">
+            <User className="mx-auto text-gray-400 mb-3" size={48} />
             <p className="text-gray-600">No trainers found. Create your first trainer!</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md text-gray-900">
-              <thead className="bg-gray-800 text-white">
-                <tr className="w-full bg-gray-100 border-b">
-                  <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                    Trainer Name
+          <div className="overflow-x-auto bg-white rounded-xl border border-gray-100 shadow-sm">
+            <table className="min-w-full text-gray-900">
+              <thead>
+                <tr>
+                  <th className="py-4 px-6 text-left text-gray-700 font-semibold border-b">
+                    <div className="flex items-center">
+                      <User className="mr-2 text-gray-500" size={16} />
+                      Trainer Name
+                    </div>
                   </th>
-                  <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                    Subjects
+                  <th className="py-4 px-6 text-left text-gray-700 font-semibold border-b">
+                    <div className="flex items-center">
+                      <Bookmark className="mr-2 text-gray-500" size={16} />
+                      Subjects
+                    </div>
                   </th>
-                  <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                    Location
+                  <th className="py-4 px-6 text-left text-gray-700 font-semibold border-b">
+                    <div className="flex items-center">
+                      <MapPin className="mr-2 text-gray-500" size={16} />
+                      Location
+                    </div>
                   </th>
-                  <th className="py-3 px-4 text-left text-gray-600 font-semibold">
-                    Email
+                  <th className="py-4 px-6 text-left text-gray-700 font-semibold border-b">
+                    <div className="flex items-center">
+                      <Mail className="mr-2 text-gray-500" size={16} />
+                      Email
+                    </div>
                   </th>
-                  <th className="py-3 px-4 text-left text-gray-600 font-semibold">
+                  <th className="py-4 px-6 text-left text-gray-700 font-semibold border-b">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {trainers.map((trainer) => (
-                  <tr key={trainer._id} className="border-b">
-                    <td className="py-3 px-4">{trainer.name}</td>
-                    <td className="py-3 px-4">
-                      {trainer.training_subjects.join(", ")}
+                  <tr key={trainer._id} className="border-b hover:bg-gray-50">
+                    <td className="py-4 px-6 font-medium">{trainer.name}</td>
+                    <td className="py-4 px-6">
+                      <div className="flex flex-wrap gap-1">
+                        {trainer.training_subjects.map((subject, idx) => (
+                          <span 
+                            key={idx} 
+                            className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
+                          >
+                            {subject}
+                          </span>
+                        ))}
+                      </div>
                     </td>
-                    <td className="py-3 px-4">{trainer.location}</td>
-                    <td className="py-3 px-4">
+                    <td className="py-4 px-6">{trainer.location}</td>
+                    <td className="py-4 px-6">
                       <a 
                         href={`mailto:${trainer.email}`}
-                        className="text-blue-500 hover:underline"
+                        className="flex items-center text-blue-600 hover:underline"
                       >
+                        <Mail className="mr-1" size={14} />
                         {trainer.email}
                       </a>
                     </td>
-                    <td className="py-3 px-4 flex space-x-2">
-                      <button 
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                        onClick={() => handleEditTrainer(trainer)}
-                      >
-                        Edit
-                      </button>
-                      <button 
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                        onClick={() => handleDeleteTrainer(trainer._id)}
-                      >
-                        Delete
-                      </button>
+                    <td className="py-4 px-6">
+                      <div className="flex space-x-2">
+                        <button 
+                          className="flex items-center bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+                          onClick={() => handleEditTrainer(trainer)}
+                        >
+                          <Edit2 className="mr-1" size={14} />
+                          Edit
+                        </button>
+                        <button 
+                          className="flex items-center bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700 transition-colors duration-300"
+                          onClick={() => handleDeleteTrainer(trainer._id)}
+                        >
+                          <Trash2 className="mr-1" size={14} />
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -239,73 +286,97 @@ export default function Trainers() {
         )}
       </div>
       
-      {/* Create Trainer Modal */}
+      {/* Create/Edit Trainer Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">{editTrainerId ? "Edit Trainer" : "Create Trainer"}</h2>
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                {editTrainerId ? (
+                  <Edit2 className="mr-2 text-blue-600" size={24} />
+                ) : (
+                  <UserPlus className="mr-2 text-green-600" size={24} />
+                )}
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {editTrainerId ? "Edit Trainer" : "Create Trainer"}
+                </h2>
+              </div>
+              <button 
+                onClick={() => { setShowCreateModal(false); setEditTrainerId(null); }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
             <form onSubmit={handleCreateOrUpdateTrainer}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className=" text-gray-700 text-sm font-semibold mb-2 flex items-center">
+                  <User className="mr-2 text-gray-500" size={16} />
                   Name
                 </label>
                 <input
                   type="text"
                   value={newTrainer.name}
                   onChange={(e) => setNewTrainer({...newTrainer, name: e.target.value})}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className=" text-gray-700 text-sm font-semibold mb-2 flex items-center">
+                  <Bookmark className="mr-2 text-gray-500" size={16} />
                   Subjects (comma separated)
                 </label>
                 <input
                   type="text"
                   value={newTrainer.training_subjects}
                   onChange={(e) => setNewTrainer({...newTrainer, training_subjects: e.target.value})}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   placeholder="React.js, Next.js, Node.js"
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className=" text-gray-700 text-sm font-semibold mb-2 flex items-center">
+                  <MapPin className="mr-2 text-gray-500" size={16} />
                   Location
                 </label>
                 <input
                   type="text"
                   value={newTrainer.location}
                   onChange={(e) => setNewTrainer({...newTrainer, location: e.target.value})}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   required
                 />
               </div>
               <div className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className=" text-gray-700 text-sm font-semibold mb-2 flex items-center">
+                  <Mail className="mr-2 text-gray-500" size={16} />
                   Email
                 </label>
                 <input
                   type="email"
                   value={newTrainer.email}
                   onChange={(e) => setNewTrainer({...newTrainer, email: e.target.value})}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   required
                 />
               </div>
-              <div className="flex justify-end space-x-2">
+              <div className="flex justify-end space-x-3">
                 <button
                   type="button"
                   onClick={() => { setShowCreateModal(false); setEditTrainerId(null); }}
-                  className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                  className="flex items-center bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300"
                 >
+                  <X className="mr-1" size={16} />
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                  className="flex items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300"
                 >
+                  <Save className="mr-1" size={16} />
                   {editTrainerId ? "Update" : "Create"}
                 </button>
               </div>
@@ -317,20 +388,25 @@ export default function Trainers() {
       {/* Delete Trainer Confirmation Modal */}
       {deleteTrainerId && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-sm">
-            <h2 className="text-xl font-bold mb-4 text-red-600">Confirm Delete</h2>
-            <p className="mb-6 text-gray-800">Are you sure you want to delete this trainer? This action cannot be undone.</p>
-            <div className="flex justify-end space-x-2">
+          <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-xl">
+            <div className="flex items-center mb-4">
+              <AlertCircle className="mr-2 text-red-600" size={24} />
+              <h2 className="text-xl font-bold text-red-600">Confirm Delete</h2>
+            </div>
+            <p className="mb-6 text-gray-700">Are you sure you want to delete this trainer? This action cannot be undone.</p>
+            <div className="flex justify-end space-x-3">
               <button
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                className="flex items-center bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300"
                 onClick={() => setDeleteTrainerId(null)}
               >
+                <X className="mr-1" size={16} />
                 Cancel
               </button>
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="flex items-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-300"
                 onClick={confirmDeleteTrainer}
               >
+                <Trash2 className="mr-1" size={16} />
                 Delete
               </button>
             </div>
