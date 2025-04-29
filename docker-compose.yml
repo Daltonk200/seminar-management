@@ -1,0 +1,32 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/seminar-management
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+    depends_on:
+      - mongodb
+      - mailhog
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"  # SMTP port
+      - "8025:8025"  # Web UI port
+
+volumes:
+  mongodb_data:
