@@ -44,6 +44,8 @@ export default function Courses() {
   });
   const [editCourseId, setEditCourseId] = useState<string | null>(null);
   const [deleteCourseId, setDeleteCourseId] = useState<string | null>(null);
+  const [confirmAssign, setConfirmAssign] = useState<{ courseId: string | null, trainerId: string | null }>({ courseId: null, trainerId: null });
+  const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
 
   // Open modal for editing, pre-fill with course data
   const handleEditCourse = (course: Course) => {
@@ -130,16 +132,21 @@ export default function Courses() {
     }
   };
 
-  const handleAssignTrainer = async (courseId: string) => {
+  const handleAssignTrainer = (courseId: string) => {
     const trainerId = selectedTrainer[courseId];
     if (!trainerId) return;
-    setAssigning(courseId);
+    setConfirmAssign({ courseId, trainerId });
+  };
+
+  const doAssignTrainer = async () => {
+    if (!confirmAssign.courseId || !confirmAssign.trainerId) return;
+    setAssigning(confirmAssign.courseId);
     setError(null);
     try {
       const res = await fetch("/api/assign-trainer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId, trainerId }),
+        body: JSON.stringify({ courseId: confirmAssign.courseId, trainerId: confirmAssign.trainerId }),
       });
       const data = await res.json();
       if (data.success) {
@@ -151,16 +158,22 @@ export default function Courses() {
       setError("An error occurred while assigning trainer");
     } finally {
       setAssigning(null);
+      setConfirmAssign({ courseId: null, trainerId: null });
     }
   };
 
-  const handleRemoveTrainer = async (courseId: string) => {
+  const handleRemoveTrainer = (courseId: string) => {
+    setConfirmRemove(courseId);
+  };
+
+  const doRemoveTrainer = async () => {
+    if (!confirmRemove) return;
     setError(null);
     try {
       const res = await fetch("/api/assign-trainer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId, action: "remove" }),
+        body: JSON.stringify({ courseId: confirmRemove, action: "remove" }),
       });
       const data = await res.json();
       if (data.success) {
@@ -170,6 +183,8 @@ export default function Courses() {
       }
     } catch (err) {
       setError("An error occurred while removing trainer");
+    } finally {
+      setConfirmRemove(null);
     }
   };
 
@@ -435,6 +450,52 @@ export default function Courses() {
                 onClick={confirmDeleteCourse}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Confirm Assign Trainer Modal */}
+      {confirmAssign.courseId && confirmAssign.trainerId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-sm">
+            <h2 className="text-xl font-bold mb-4 text-blue-600">Confirm Assign Trainer</h2>
+            <p className="mb-6 text-gray-800">Are you sure you want to assign this trainer? An email will be sent to notify the trainer.</p>
+            <div className="flex justify-end space-x-2">
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                onClick={() => setConfirmAssign({ courseId: null, trainerId: null })}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                onClick={doAssignTrainer}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Confirm Remove Trainer Modal */}
+      {confirmRemove && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-sm">
+            <h2 className="text-xl font-bold mb-4 text-gray-600">Confirm Remove Trainer</h2>
+            <p className="mb-6 text-gray-800">Are you sure you want to remove this trainer? An email will be sent to notify the trainer.</p>
+            <div className="flex justify-end space-x-2">
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                onClick={() => setConfirmRemove(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                onClick={doRemoveTrainer}
+              >
+                Confirm
               </button>
             </div>
           </div>
