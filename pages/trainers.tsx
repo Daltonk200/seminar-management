@@ -289,26 +289,8 @@ export default function Trainers() {
       {/* Create/Edit Trainer Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                {editTrainerId ? (
-                  <Edit2 className="mr-2 text-blue-600" size={24} />
-                ) : (
-                  <UserPlus className="mr-2 text-green-600" size={24} />
-                )}
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {editTrainerId ? "Edit Trainer" : "Create Trainer"}
-                </h2>
-              </div>
-              <button 
-                onClick={() => { setShowCreateModal(false); setEditTrainerId(null); }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <X size={24} />
-              </button>
-            </div>
-            
+          <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto scrollbar-hide text-gray-900">
+            <h2 className="text-2xl font-bold mb-4">{editTrainerId ? "Edit Trainer" : "Create Trainer"}</h2>
             <form onSubmit={handleCreateOrUpdateTrainer}>
               <div className="mb-4">
                 <label className=" text-gray-700 text-sm font-semibold mb-2 flex items-center">

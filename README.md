@@ -1,40 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Seminar Management System
 
-## Getting Started
+A simple seminar/course management app with trainer assignment and email notifications. Built with Next.js, MongoDB, and Docker. 
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Live Demo (No Setup Needed)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **App:** [d209gfcj-3000.uks1.devtunnels.ms](https://d209gfcj-3000.uks1.devtunnels.ms)
+- **Mailhog (view emails):** [d209gfcj-8025.uks1.devtunnels.ms](https://d209gfcj-8025.uks1.devtunnels.ms)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+> **Note:** These links are only available while the developer's PC is online. If you can't access them, follow the steps below to run the app locally.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+---
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## 🛠️ How to Run Locally (No Coding Skills Needed)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 1. **Get the Project**
+- Click the green **Code** button on this page and choose **Download ZIP** (or use Git if you know how).
+- Unzip the folder to your computer.
 
-## Learn More
+### 2. **Install Docker Desktop**
+- Download and install Docker Desktop from [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+- Start Docker Desktop.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. **Start the App**
+- Open a terminal (or Command Prompt on Windows).
+- Go into the project folder (the one with `docker-compose.yml`).
+- Run this command:
+  ```bash
+  docker-compose up
+  ```
+- Wait for the setup to finish (it may take a few minutes the first time).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. **Open the App in Your Browser**
+- Go to [http://localhost:3000](http://localhost:3000) to use the Seminar Management app.
+- Go to [http://localhost:8025](http://localhost:8025) to view emails sent by the app (Mailhog).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📦 What Does This App Do?
+- Manage courses and trainers.
+- Assign or remove trainers from courses.
+- Trainers get email notifications when assigned or removed (emails are viewable in Mailhog, not sent to real inboxes).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 📝 Notes
+- **No coding required** to run or use the app.
+- **Data is stored locally** in Docker. If you delete the Docker containers/volumes, your data will be lost.
+- **Mailhog** is for testing emails only. No real emails are sent.
+- If you want to use the app from another computer, replace `localhost` in the URLs with your computer's IP address.
+
+---
+
+## ❓ Need Help?
+- If you get stuck, contact the developer or check the [official Docker documentation](https://docs.docker.com/get-docker/).
+
+---
+
+Enjoy managing your seminars and trainers!

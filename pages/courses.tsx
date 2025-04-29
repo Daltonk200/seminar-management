@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import Link from "next/link";
 import {
   Calendar,
   BookOpen,
@@ -353,7 +352,7 @@ export default function Courses() {
                       <td className="py-4 px-4">
                         <div className="flex flex-wrap gap-2">
                           <button
-                            className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md shadow-sm hover:bg-amber-600 transition duration-150"
+                            className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-600 transition duration-150"
                             onClick={() => handleEditCourse(course)}
                           >
                             <Edit size={16} className="mr-1" />
@@ -436,36 +435,12 @@ export default function Courses() {
       </main>
       {/* Create/Edit Course Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {editCourseId ? "Edit Course" : "Create Course"}
-              </h2>
-              <button
-                onClick={() => {
-                  setShowCreateModal(false);
-                  setEditCourseId(null);
-                }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleCreateOrUpdateCourse} className="space-y-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto scrollbar-hide text-gray-900">
+            <h2 className="text-2xl font-bold mb-4">
+              {editCourseId ? "Edit Course" : "Create Course"}
+            </h2>
+            <form onSubmit={handleCreateOrUpdateCourse}>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Name
@@ -748,3 +723,8 @@ export default function Courses() {
     </div>
   );
 }
+
+/* Tailwind custom class for hiding scrollbar */
+// Add this to your global CSS if not present:
+// .scrollbar-hide::-webkit-scrollbar { display: none; }
+// .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
