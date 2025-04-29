@@ -154,6 +154,25 @@ export default function Courses() {
     }
   };
 
+  const handleRemoveTrainer = async (courseId: string) => {
+    setError(null);
+    try {
+      const res = await fetch("/api/assign-trainer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ courseId, action: "remove" }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchData();
+      } else {
+        setError(data.message || "Failed to remove trainer");
+      }
+    } catch (err) {
+      setError("An error occurred while removing trainer");
+    }
+  };
+
   const handleDeleteCourse = (id: string) => {
     setDeleteCourseId(id);
   };
@@ -252,7 +271,10 @@ export default function Courses() {
                         Delete
                       </button>
                       {course.trainer ? (
-                        <button className="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600">
+                        <button
+                          className="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600"
+                          onClick={() => handleRemoveTrainer(course._id)}
+                        >
                           Remove Trainer
                         </button>
                       ) : (

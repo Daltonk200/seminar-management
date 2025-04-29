@@ -12,13 +12,35 @@ export default async function handler(req, res) {
   await dbConnect();
 
   try {
-    const { courseId, trainerId } = req.body;
+    const { courseId, trainerId, action } = req.body;
 
-    if (!courseId || !trainerId) {
+    if (!courseId) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Both courseId and trainerId are required' 
+        message: 'courseId is required' 
       });
+    }
+
+    // Remove trainer from course
+    if (action === 'remove') {
+      const course = await Course.findById(courseId).populate('trainer');
+      if (!course) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
+      const prevTrainer = course.trainer;
+      if (!prevTrainer) {
+        return res.status(400).json({ success: false, message: 'No trainer assigned to this course' });
+      }
+      course.trainer = null;
+      await course.save();
+      // Send email notification to previous trainer
+      await sendEmail({
+        to: prevTrainer.email,
+        subject: `You have been unassigned from: ${course.name}`,
+        text: `Hello ${prevTrainer.name},\n\nYou have been removed from the course: ${course.name} scheduled for ${new Date(course.date).toLocaleDateString()} at ${course.location}.\n\nThank you,\nSeminar Management System`,
+        html: `<h2>Course Unassignment Notification</h2><p>Hello ${prevTrainer.name},</p><p>You have been removed from the course: <strong>${course.name}</strong> scheduled for <strong>${new Date(course.date).toLocaleDateString()}</strong> at <strong>${course.location}</strong>.</p><p>Thank you,<br>Seminar Management System</p>`
+      });
+      return res.status(200).json({ success: true, message: `Trainer ${prevTrainer.name} has been removed from the course and notified via email` });
     }
 
     // Find course and trainer
