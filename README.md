@@ -101,7 +101,7 @@ Data persistence depends on MongoDB Atlas; Docker is used for container orchestr
 
 ❓ Need Help?
 
-For issues or questions, reach out via email .
+For issues or questions, reach out via email mbengbright3@gmail.com.
 
 
 

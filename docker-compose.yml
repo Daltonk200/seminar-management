@@ -7,20 +7,12 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/seminar-management
+      - MONGODB_URI=mongodb+srv://mbengbright3:unbrxJvXsCcRSEQv@cluster0.gecstf7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       - SMTP_HOST=mailhog
       - SMTP_PORT=1025
     depends_on:
-      - mongodb
       - mailhog
     restart: unless-stopped
-
-  mongodb:
-    image: mongo:6.0
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
 
   mailhog:
     image: mailhog/mailhog
